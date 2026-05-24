@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Patient Data Analysis</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="loginScreen" class="login-screen" aria-label="Login">
+      <div class="login-panel">
+        <div class="brand-mark" aria-hidden="true">+</div>
+        <p class="eyebrow">Hospital Analytics Portal</p>
+        <h1>Patient Data Analysis</h1>
+        <p class="intro">Sign in to view admission trends, department workload, patient risk levels, and treatment insights.</p>
+
+        <form id="loginForm" class="login-form">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" required>
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+          <div class="login-options">
+            <label class="check-option" for="rememberUser">
+              <input id="rememberUser" type="checkbox" checked>
+              <span>Remember username</span>
+            </label>
+            <label class="check-option" for="showPassword">
+              <input id="showPassword" type="checkbox">
+              <span>Show password</span>
+            </label>
+          </div>
+
+          <p id="loginError" class="form-error" role="alert"></p>
+          <button type="submit">Login</button>
+        </form>
+
+        <div class="access-actions" aria-label="Login access options">
+          <button id="toggleChangeLogin" type="button">Change login details</button>
+          <button id="forgotPasswordBtn" type="button">Forgot password?</button>
+          <button id="resetLoginBtn" type="button">Reset demo login</button>
+        </div>
+
+        <form id="changeLoginForm" class="login-form change-login hidden" aria-label="Change login details">
+          <h3>Update Login</h3>
+          <label for="currentPassword">Current Password</label>
+          <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
+
+          <label for="newUsername">New Username</label>
+          <input id="newUsername" name="newUsername" type="text" autocomplete="username" required>
+
+          <label for="newPassword">New Password</label>
+          <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" minlength="6" required>
+
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="6" required>
+
+          <p id="changeLoginMessage" class="form-error" role="alert"></p>
+          <button type="submit">Save New Login</button>
+        </form>
+
+        <p id="loginHelp" class="hint">Demo login: admin / hospital123</p>
+      </div>
+    </section>
+
+    <section id="dashboard" class="dashboard hidden" aria-label="Hospital patient analysis dashboard">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-mark small" aria-hidden="true">+</div>
+          <div>
+            <strong>MedInsight</strong>
+            <span>Patient Analysis</span>
+          </div>
+        </div>
+        <nav class="nav-list" aria-label="Dashboard sections">
+          <a href="#overview" class="active">Overview</a>
+          <a href="#charts">Charts</a>
+          <a href="#patients">Patients</a>
+          <a href="#prediction">Risk Model</a>
+        </nav>
+        <button id="logoutBtn" class="secondary-button">Logout</button>
+      </aside>
+
+      <div class="dashboard-main">
+        <header class="topbar" id="overview">
+          <div>
+            <p class="eyebrow">Working Model</p>
+            <h2>Hospital Patient Data Analysis</h2>
+          </div>
+          <div class="filter-group">
+            <label for="departmentFilter">Department</label>
+            <select id="departmentFilter">
+              <option value="All">All Departments</option>
+            </select>
+          </div>
+        </header>
+
+        <section class="metric-grid" aria-label="Key metrics">
+          <article class="metric-card">
+            <span>Total Patients</span>
+            <strong id="totalPatients">0</strong>
+            <small>Records in current view</small>
+          </article>
+          <article class="metric-card">
+            <span>Avg. Stay</span>
+            <strong id="avgStay">0 days</strong>
+            <small>Length of hospital stay</small>
+          </article>
+          <article class="metric-card">
+            <span>High Risk</span>
+            <strong id="highRisk">0</strong>
+            <small>Patients needing priority review</small>
+          </article>
+          <article class="metric-card">
+            <span>Recovery Rate</span>
+            <strong id="recoveryRate">0%</strong>
+            <small>Discharged as recovered</small>
+          </article>
+        </section>
+
+        <section class="analysis-grid" id="charts">
+          <article class="chart-panel">
+            <div class="panel-heading">
+              <h3>Patients by Department</h3>
+              <span id="topDepartment">Top: -</span>
+            </div>
+            <canvas id="departmentChart" width="680" height="320" aria-label="Bar chart showing patients by department"></canvas>
+          </article>
+
+          <article class="chart-panel">
+            <div class="panel-heading">
+              <h3>Admission Trend</h3>
+              <span>Monthly volume</span>
+            </div>
+            <canvas id="trendChart" width="680" height="320" aria-label="Line chart showing monthly admissions"></canvas>
+          </article>
+        </section>
+
+        <section class="split-section">
+          <article class="table-panel" id="patients">
+            <div class="panel-heading">
+              <h3>Patient Records</h3>
+              <input id="searchInput" type="search" placeholder="Search patient or diagnosis">
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Patient</th>
+                    <th>Age</th>
+                    <th>Department</th>
+                    <th>Diagnosis</th>
+                    <th>Stay</th>
+                    <th>Status</th>
+                    <th>Risk</th>
+                  </tr>
+                </thead>
+                <tbody id="patientTable"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="risk-panel" id="prediction">
+            <div class="panel-heading">
+              <h3>Risk Model</h3>
+              <span>Sample scoring</span>
+            </div>
+            <p class="model-copy">The model estimates risk from age, length of stay, condition severity, and department load. This is a project demo, not a medical diagnosis tool.</p>
+            <div id="riskList" class="risk-list"></div>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
